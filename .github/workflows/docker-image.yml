@@ -20,7 +20,6 @@ jobs:
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
     - name: Docker build
       run: docker build . --file Dockerfile --tag fmidev/smartmet-data-gfs:latest
-    - name: Docker test
     - name: Docker tag
       run: docker image tag fmidev/smartmet-data-gfs:latest fmidev/smartmet-data-gfs:$(date +%y.%m.%d -d @$(docker run --rm fmidev/smartmet-data-gfs:latest rpm -qa --queryformat %'{buildtime}\n' smartmet-*|sort -n|tail -1))
     - name: Docker push
