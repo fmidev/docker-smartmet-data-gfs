@@ -82,8 +82,8 @@ LOGFILE=$BASE/logs/data/gfs_${AREA}_${RT_HOUR}.log
 
 OUTNAME=${RT_DATE_HHMM}_gfs_$AREA
 
-# Use log file if not run interactively
-if [ $TERM = "dumb" ]; then
+# Use log file if not run interactively and not run in a docker container
+if [[ $TERM = "dumb" && ! -f /.dockerenv ]]; then
     exec &> $LOGFILE
 fi
 
