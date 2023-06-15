@@ -24,15 +24,19 @@ RUN mkdir -p .cnf/data && \
     mkdir -p tmp/data/gfs && \
     mkdir -p logs/data && \
     mkdir -p run/data/gfs/{bin,cnf} && \
-    # Add volume location for chown
-    mkdir -p /smartmet/data
+    mkdir -p editor/in && \
+    mkdir -p data
 
-COPY gfs-surface.st run/data/gfs/cnf/gfs-surface.st
-COPY gfs-gribtoqd.cnf run/data/gfs/cnf/
-COPY get_gfs.sh run/data/gfs/bin/get_gfs.sh
+RUN groupadd data-gfs -g 1001 && useradd -r -u 1001 -g data-gfs data-gfs && \
+    chown -R data-gfs:data-gfs /smartmet/data && \
+    chown -R data-gfs:data-gfs /smartmet/tmp && \
+    chown -R data-gfs:data-gfs /smartmet/logs && \
+    chown -R data-gfs:data-gfs /smartmet/editor
 
-RUN groupadd -r data-gfs && useradd -r -g data-gfs data-gfs && \
-    chown -R data-gfs:data-gfs /smartmet
+COPY gfs-surface.st /smartmet/run/data/gfs/cnf/gfs-surface.st
+COPY gfs-gribtoqd.cnf /smartmet/run/data/gfs/cnf/gfs-gribtoqd.cnf
+COPY get_gfs.sh /smartmet/run/data/gfs/bin/get_gfs.sh
+
 
 VOLUME /smartmet/data/
 USER data-gfs
